@@ -6,7 +6,7 @@ function getNodes() {
 function setNodes(list) {
     list.sort(function (a, b) {
         if (a.latency === -1)
-            return 114514;
+            return -114514;
         return a.latency - b.latency;
     });
     localStorage.setItem('nodes', JSON.stringify(list));
@@ -122,7 +122,9 @@ function loadInitialNodes() {
     nodes.push({url: "https://rpc-mainnet.maticvigil.com", latency: -1, height: -1});
     nodes.push({url: "https://rpc-mainnet.matic.quiknode.pro", latency: -1, height: -1});
     nodes.push({url: "https://matic-mainnet-full-rpc.bwarelabs.com", latency: -1, height: -1});
+    nodes.push({url: "https://matic-mainnet-archive-rpc.bwarelabs.com", latency: -1, height: -1});
     nodes.push({url: "https://matic.mytokenpocket.vip", latency: -1, height: -1});
+
     setNodes(nodes);
     setSelectedNode("https://rpc-mainnet.matic.network");
 }
