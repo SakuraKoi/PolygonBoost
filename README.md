@@ -31,3 +31,4 @@ How To:
 
 ## Special thanks
 - Icons made by Darius Dan from www.flaticon.com
+- Modified from [chrome-extension-redirector](https://github.com/bendavis78/chrome-extension-redirector)
