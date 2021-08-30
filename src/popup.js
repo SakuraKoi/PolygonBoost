@@ -138,7 +138,9 @@ function loadInitialNodes() {
 function refreshNode() {
     // {"jsonrpc": "2.0", "id": 1, "method": "eth_blockNumber", "params": []}
     // {"jsonrpc":"2.0","id":1,"result":"0x11ae026"}
-
+    var selected = getSelectedNode();
+    setSelectedNode(null);
+    $('#btn-refresh').prop("disabled", true);
     var nodes = getNodes();
     var requests = [];
     nodes.forEach(function (item, index, array) {
@@ -166,11 +168,12 @@ function refreshNode() {
         }));
     });
 
-    $.when.apply($, requests).then(function () {
+    var done = function () {
         setNodes(nodes);
-    }, function () {
-        setNodes(nodes);
-    });
+        setSelectedNode(selected);
+        $('#btn-refresh').prop("disabled", false);
+    };
+    $.when.apply($, requests).then(done, done);
 }
 
 function useFastest() {
