@@ -126,7 +126,7 @@ function loadInitialNodes() {
     nodes.push({url: "https://matic.mytokenpocket.vip", latency: -1, height: -1});
 
     setNodes(nodes);
-    setSelectedNode("https://rpc-mainnet.matic.network");
+    setSelectedNode("https://matic-mainnet.chainstacklabs.com");
 }
 
 function refreshNode() {
