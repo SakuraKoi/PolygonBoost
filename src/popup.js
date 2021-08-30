@@ -5,9 +5,17 @@ function getNodes() {
 
 function setNodes(list) {
     list.sort(function (a, b) {
-        if (a.latency === -1)
-            return 114514;
-        return a.latency - b.latency;
+        if (a.latency === -1) {
+            if (b.latency === -1)
+                return 0;
+            return 1;
+        }
+
+        if (a.latency < b.latency)
+            return -1;
+        if (a.latency > b.latency)
+            return 1;
+        return 0;
     });
     localStorage.setItem('nodes', JSON.stringify(list));
     storageUpdate();
@@ -22,6 +30,8 @@ function setSelectedNode(node) {
         localStorage.removeItem('nodes-selected');
     else
         localStorage.setItem('nodes-selected', node);
+
+    storageUpdate();
 }
 
 function tmpl(id, context) {
@@ -50,8 +60,6 @@ function addToContainer(info, latencyThreshold, maxHeight) {
 
     $row.find('.radio-select').on('click', function (e) {
         setSelectedNode(info.url);
-
-        storageUpdate();
     });
     $row.find('.btn-delete').on('click', function (e) {
         var nodes = getNodes();
@@ -65,8 +73,6 @@ function addToContainer(info, latencyThreshold, maxHeight) {
         setNodes(nodes);
         if ($row.find('.radio-select').is(':checked'))
             setSelectedNode(null);
-
-        storageUpdate();
     });
     $row.appendTo($('#node-container'));
 }
@@ -134,9 +140,10 @@ function refreshNode() {
     // {"jsonrpc":"2.0","id":1,"result":"0x11ae026"}
 
     var nodes = getNodes();
+    var requests = [];
     nodes.forEach(function (item, index, array) {
         var time = Date.now();
-        $.ajax({
+        requests.push($.ajax({
             url: item.url,
             timeout: 2000,
             method: "POST",
@@ -147,25 +154,22 @@ function refreshNode() {
                 if (result.result) {
                     item.latency = used;
                     item.height = parseInt(result.result);
-
-                    setNodes(nodes);
-                    storageUpdate();
                 } else {
                     item.latency = -1;
                     item.height = -1;
-
-                    setNodes(nodes);
-                    storageUpdate();
                 }
             },
             error: function () {
                 item.latency = -1;
                 item.height = -1;
-
-                setNodes(nodes);
-                storageUpdate();
             }
-        });
+        }));
+    });
+
+    $.when.apply($, requests).then(function () {
+        setNodes(nodes);
+    }, function () {
+        setNodes(nodes);
     });
 }
 
@@ -175,13 +179,10 @@ function useFastest() {
         setSelectedNode(null);
     else
         setSelectedNode(nodes[0].url);
-
-    storageUpdate();
 }
 
 function disableBoost() {
     setSelectedNode(null);
-    storageUpdate();
 }
 
 $(document).ready(function () {
