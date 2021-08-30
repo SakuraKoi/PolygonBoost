@@ -42,8 +42,6 @@ function mergeNewHeaders(originalHeaders) {
     };
     var index = getHeaderIndex(mergedHeaders, newHeader);
 
-    //if a matching header is defined, replace it
-    //if not, add the new header to the end
     if (index > -1) {
         mergedHeaders[index] = newHeader;
     } else {
