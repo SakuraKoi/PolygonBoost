@@ -1,6 +1,6 @@
 {
   "name": "PolygonBoost",
-  "description": "Boost your DeFi experience by replacing Polygon node for faster data loading",
+  "description": "Boost your DeFi experience by replacing Matic RPC for faster data loading",
   "version": "1.0",
   "manifest_version": 2,
   "background": {

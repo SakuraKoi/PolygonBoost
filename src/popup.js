@@ -6,7 +6,7 @@ function getNodes() {
 function setNodes(list) {
     list.sort(function (a, b) {
         if (a.latency === -1)
-            return -114514;
+            return 114514;
         return a.latency - b.latency;
     });
     localStorage.setItem('nodes', JSON.stringify(list));
