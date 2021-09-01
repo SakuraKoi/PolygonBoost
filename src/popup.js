@@ -130,13 +130,24 @@ function addNode() {
     const node = $("#text-add-net").val();
     if (node === "")
         return;
-    const nodes = getNodes();
+    let nodes = getNodes();
     nodes.push({
         url: node,
         latency: -1,
         height: -1,
-        secured: false
+        secured: OFFICIAL_NODES.indexOf(node) !== -1
     });
+
+    nodes = nodes.reduce((result, element) => {
+            let normalize = x => typeof x === 'string' ? x.toLowerCase() : x;
+
+            let normalizedElement = normalize(element);
+            if (result.every(otherElement => normalize(otherElement) !== normalizedElement))
+                result.push(element);
+
+            return result;
+        }, []);
+
     setNodes(nodes);
     $("#text-add-net").val("");
 }
