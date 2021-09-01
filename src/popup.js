@@ -118,7 +118,7 @@ function storageUpdate() {
     const $tbody = $('#node-container');
     $tbody.html('');
 
-    const latencyThreshold = ((nodes[0].latency + maxLatency(nodes)) / 2) * 0.75;
+    const latencyThreshold = Math.max(300, ((nodes[0].latency + maxLatency(nodes)) / 2) * 0.75);
     const heightThreshold = maxHeight(nodes);
     for (let i = 0; i < nodes.length; i++) {
         addToContainer(nodes[i], latencyThreshold, heightThreshold);
