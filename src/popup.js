@@ -141,8 +141,8 @@ function addNode() {
     nodes = nodes.reduce((result, element) => {
             let normalize = x => typeof x === 'string' ? x.toLowerCase() : x;
 
-            let normalizedElement = normalize(element);
-            if (result.every(otherElement => normalize(otherElement) !== normalizedElement))
+            let normalizedUrl = normalize(element.url);
+            if (result.every(otherElement => normalize(otherElement.url) !== normalizedUrl))
                 result.push(element);
 
             return result;
