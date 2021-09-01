@@ -63,7 +63,7 @@ function addToContainer(info, latencyThreshold, maxHeight) {
         'latency': info.latency,
         'color': info.latency === -1 ? "danger" : info.latency < latencyThreshold ? "success" : "warning",
         'height': info.height,
-        'height_color': info.height < maxHeight ? "danger" : "muted"
+        'height_color': maxHeight === info.height ? "success text-bold" : maxHeight - info.height < 5 ? "muted" : "danger"
     });
 
     if (getSelectedNode() === info.url) {
