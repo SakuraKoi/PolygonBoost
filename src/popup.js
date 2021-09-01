@@ -1,12 +1,17 @@
-const DEFAULT_NODES = [
+const OFFICIAL_NODES = [
+    "https://polygon-rpc.com",
     "https://rpc-mainnet.matic.network",
     "https://matic-mainnet.chainstacklabs.com",
     "https://rpc-mainnet.maticvigil.com",
     "https://rpc-mainnet.matic.quiknode.pro",
     "https://matic-mainnet-full-rpc.bwarelabs.com",
     "https://matic-mainnet-archive-rpc.bwarelabs.com",
+];
+
+const DEFAULT_NODE = "https://polygon-rpc.com";
+
+const PRE_COLLECTED_NODES = [
     "https://matic.mytokenpocket.vip",
-    "https://polygon-rpc.com",
     "https://nd-011-002-446.p2pify.com/97b6690de8c3b5b8aabbe90c1dd9c15a",
 ];
 
@@ -63,7 +68,8 @@ function addToContainer(info, latencyThreshold, maxHeight) {
         'latency': info.latency,
         'color': info.latency === -1 ? "danger" : info.latency < latencyThreshold ? "success" : "warning",
         'height': info.height,
-        'height_color': maxHeight === info.height ? "success text-bold" : maxHeight - info.height < 5 ? "muted" : "danger"
+        'height_color': maxHeight === info.height ? "success text-bold" : maxHeight - info.height < 5 ? "muted" : "danger",
+        'secured': info.secured ? "" : "d-none"
     });
 
     if (getSelectedNode() === info.url) {
@@ -117,6 +123,7 @@ function storageUpdate() {
     for (let i = 0; i < nodes.length; i++) {
         addToContainer(nodes[i], latencyThreshold, heightThreshold);
     }
+    $("[data-bs-toggle='tooltip']").tooltip();
 }
 
 function addNode() {
@@ -127,7 +134,8 @@ function addNode() {
     nodes.push({
         url: node,
         latency: -1,
-        height: -1
+        height: -1,
+        secured: false
     });
     setNodes(nodes);
     $("#text-add-net").val("");
@@ -136,12 +144,26 @@ function addNode() {
 function loadInitialNodes() {
     const nodes = getNodes();
 
-    DEFAULT_NODES.forEach(function (item) {
-        nodes.push({url: item, latency: -1, height: -1});
+    OFFICIAL_NODES.forEach(function (item) {
+        nodes.push({
+            url: item,
+            latency: -1,
+            height: -1,
+            secured: true
+        });
+    });
+
+    PRE_COLLECTED_NODES.forEach(function (item) {
+        nodes.push({
+            url: item,
+            latency: -1,
+            height: -1,
+            secured: false
+        });
     });
 
     setNodes(nodes);
-    setSelectedNode("https://matic-mainnet.chainstacklabs.com");
+    setSelectedNode(DEFAULT_NODE);
 }
 
 function refreshNode() {
