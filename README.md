@@ -2,7 +2,7 @@
 Boost your DeFi experience by replacing Matic RPC for faster data loading
 
 ## Whats this
-PolygonBoost is a chrome extension that replaces the Matic-MainNet RPC used by DeFi websites with faster servers
+PolygonBoost is a Chrome extension that replaces the Matic-MainNet RPC used by DeFi websites with faster servers
 
 ## Install
 1. Clone this repo to your disk
@@ -22,7 +22,7 @@ PolygonBoost is a chrome extension that replaces the Matic-MainNet RPC used by D
 Try to use another RPC server, That's not my fault but the RPC you're using not compatible with the website you're visiting
 > It not works and the website is still using old node?
 
-This may be because you are visiting a site that uses a RPC server that we do not yet support, You can manully add it to RPC list.\
+This may be because you are visiting a site that uses an RPC server that we do not yet support, You can manully add it to RPC list.\
 How To:
 1. Press F12 to open Developer Tools, switch to Network
 2. Find the Matic RPC server used by the site, which is usually spamming in the request list

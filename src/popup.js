@@ -1,3 +1,15 @@
+const DEFAULT_NODES = [
+    "https://rpc-mainnet.matic.network",
+    "https://matic-mainnet.chainstacklabs.com",
+    "https://rpc-mainnet.maticvigil.com",
+    "https://rpc-mainnet.matic.quiknode.pro",
+    "https://matic-mainnet-full-rpc.bwarelabs.com",
+    "https://matic-mainnet-archive-rpc.bwarelabs.com",
+    "https://matic.mytokenpocket.vip",
+    "https://polygon-rpc.com",
+    "https://nd-011-002-446.p2pify.com/97b6690de8c3b5b8aabbe90c1dd9c15a",
+];
+
 function getNodes() {
     json = localStorage.getItem('nodes') || '[]';
     return JSON.parse(json);
@@ -35,9 +47,9 @@ function setSelectedNode(node) {
 }
 
 function tmpl(id, context) {
-    var tmpl = $('#' + id).html()
-    for (var v in context) {
-        var pattern = '{{' + v + '}}';
+    let tmpl = $('#' + id).html();
+    for (let v in context) {
+        const pattern = '{{' + v + '}}';
         while (tmpl.match(new RegExp(pattern))) {
             tmpl = tmpl.replace(pattern, context[v]);
         }
@@ -46,7 +58,7 @@ function tmpl(id, context) {
 }
 
 function addToContainer(info, latencyThreshold, maxHeight) {
-    var $row = tmpl('row_template', {
+    const $row = tmpl('row_template', {
         'node': info.url,
         'latency': info.latency,
         'color': info.latency === -1 ? "danger" : info.latency < latencyThreshold ? "success" : "warning",
@@ -62,8 +74,8 @@ function addToContainer(info, latencyThreshold, maxHeight) {
         setSelectedNode(info.url);
     });
     $row.find('.btn-delete').on('click', function (e) {
-        var nodes = getNodes();
-        var target = -1;
+        const nodes = getNodes();
+        let target = -1;
         nodes.forEach(function (item, index, array) {
             if (item.url === info.url) {
                 target = index;
@@ -96,22 +108,22 @@ function maxHeight(nodes) {
 }
 
 function storageUpdate() {
-    var nodes = getNodes();
-    var $tbody = $('#node-container');
+    const nodes = getNodes();
+    const $tbody = $('#node-container');
     $tbody.html('');
 
-    var latencyThreshold = ((nodes[0].latency + maxLatency(nodes)) / 2) * 0.75;
-    var heightThreshold = maxHeight(nodes);
-    for (var i = 0; i < nodes.length; i++) {
+    const latencyThreshold = ((nodes[0].latency + maxLatency(nodes)) / 2) * 0.75;
+    const heightThreshold = maxHeight(nodes);
+    for (let i = 0; i < nodes.length; i++) {
         addToContainer(nodes[i], latencyThreshold, heightThreshold);
     }
 }
 
 function addNode() {
-    var node = $("#text-add-net").val();
+    const node = $("#text-add-net").val();
     if (node === "")
         return;
-    var nodes = getNodes();
+    const nodes = getNodes();
     nodes.push({
         url: node,
         latency: -1,
@@ -122,14 +134,11 @@ function addNode() {
 }
 
 function loadInitialNodes() {
-    var nodes = getNodes();
-    nodes.push({url: "https://rpc-mainnet.matic.network", latency: -1, height: -1});
-    nodes.push({url: "https://matic-mainnet.chainstacklabs.com", latency: -1, height: -1});
-    nodes.push({url: "https://rpc-mainnet.maticvigil.com", latency: -1, height: -1});
-    nodes.push({url: "https://rpc-mainnet.matic.quiknode.pro", latency: -1, height: -1});
-    nodes.push({url: "https://matic-mainnet-full-rpc.bwarelabs.com", latency: -1, height: -1});
-    nodes.push({url: "https://matic-mainnet-archive-rpc.bwarelabs.com", latency: -1, height: -1});
-    nodes.push({url: "https://matic.mytokenpocket.vip", latency: -1, height: -1});
+    const nodes = getNodes();
+
+    DEFAULT_NODES.forEach(function (item) {
+        nodes.push({url: item, latency: -1, height: -1});
+    });
 
     setNodes(nodes);
     setSelectedNode("https://matic-mainnet.chainstacklabs.com");
@@ -138,13 +147,13 @@ function loadInitialNodes() {
 function refreshNode() {
     // {"jsonrpc": "2.0", "id": 1, "method": "eth_blockNumber", "params": []}
     // {"jsonrpc":"2.0","id":1,"result":"0x11ae026"}
-    var selected = getSelectedNode();
+    const selected = getSelectedNode();
     setSelectedNode(null);
     $('#btn-refresh').prop("disabled", true);
-    var nodes = getNodes();
-    var requests = [];
+    const nodes = getNodes();
+    const requests = [];
     nodes.forEach(function (item, index, array) {
-        var time = Date.now();
+        const time = Date.now();
         requests.push($.ajax({
             url: item.url,
             timeout: 2000,
@@ -152,7 +161,7 @@ function refreshNode() {
             contentType: "application/json",
             data: '{"jsonrpc": "2.0", "id": 1, "method": "eth_blockNumber", "params": []}',
             success: function (result) {
-                var used = Date.now() - time;
+                const used = Date.now() - time;
                 if (result.result) {
                     item.latency = used;
                     item.height = parseInt(result.result);
@@ -168,7 +177,7 @@ function refreshNode() {
         }));
     });
 
-    var done = function () {
+    const done = function () {
         setNodes(nodes);
         setSelectedNode(selected);
         $('#btn-refresh').prop("disabled", false);
@@ -177,7 +186,7 @@ function refreshNode() {
 }
 
 function useFastest() {
-    var nodes = getNodes();
+    const nodes = getNodes();
     if (nodes.length === 0)
         setSelectedNode(null);
     else
